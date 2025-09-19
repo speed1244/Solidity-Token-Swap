@@ -1,0 +1,10 @@
+node_modules
+.env
+typechain
+typechain-types
+dex.json
+token.json
+
+#Hardhat files
+cache
+artifacts
