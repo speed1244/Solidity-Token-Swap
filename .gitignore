@@ -2,8 +2,7 @@ node_modules
 .env
 typechain
 typechain-types
-dex.json
-token.json
+*.json
 
 #Hardhat files
 cache

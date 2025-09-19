@@ -3,15 +3,24 @@ const hre = require("hardhat");
 const fs = require("fs/promises");
 
 async function main() {
-  const Token = await hre.ethers.getContractFactory("Token");
-  const token = await Token.deploy("100");
+  const TimToken = await hre.ethers.getContractFactory("Token");
+  const timToken = await TimToken.deploy("100");
+
+  const AliceToken = await hre.ethers.getContractFactory("AliceCoin");
+  const aliceToken = await AliceToken.deploy("200");
 
   const DEX = await hre.ethers.getContractFactory("DEX");
-  const dex = await DEX.deploy(token.address, 100);
+  const dex = await DEX.deploy(timToken.address, 100);
 
-  await token.deployed();
+  await timToken.deployed();
+  await aliceToken.deployed();
   await dex.deployed();
-  await writeDeploymentInfo(token, "token.json");
+  console.log("Tim Token deployed to:", timToken.address);
+  console.log("Ali Token deployed to:", aliceToken.address);
+  console.log("DEX deployed to:", dex.address);
+
+  await writeDeploymentInfo(timToken, "tokenTim.json");
+  await writeDeploymentInfo(aliceToken, "tokenAli.json");
   await writeDeploymentInfo(dex, "dex.json");
 }
 
