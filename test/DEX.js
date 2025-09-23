@@ -51,6 +51,10 @@ describe("DEX", () => {
     it("Should return correct token price", async () => {
       expect(await dex.getPrice(10)).to.equal(price * 10);
     });
+
+    it("Should initialize token price in mapping", async () => {
+      expect(await dex.tokenPrices(token.address)).to.equal(100);
+    });
   });
 
   describe("Buy", () => {
