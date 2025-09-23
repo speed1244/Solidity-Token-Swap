@@ -3,8 +3,7 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
- * @title Simple DEX Contract
- * @author Your Name
+ * @title DEX Contract
  * @notice A basic decentralized exchange for trading ERC20 tokens with ETH
  * @dev This contract allows owner to list tokens for sale at fixed prices
  */
@@ -14,10 +13,14 @@ contract DEX {
     uint256 price;
     address owner;
 
+    mapping(address => uint256) public tokenPrices;
+
     constructor(IERC20 _token, uint256 _price) {
         associatedToken = _token;
         owner = msg.sender;
         price = _price;
+
+        tokenPrices[address(_token)] = _price;
     }
 
     modifier onlyOwner() {
