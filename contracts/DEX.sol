@@ -14,6 +14,7 @@ contract DEX {
     address owner;
 
     mapping(address => uint256) public tokenPrices;
+    address[] public supportedTokens;
 
     constructor(IERC20 _token, uint256 _price) {
         associatedToken = _token;
@@ -21,6 +22,7 @@ contract DEX {
         price = _price;
 
         tokenPrices[address(_token)] = _price;
+        supportedTokens.push(address(_token));
     }
 
     modifier onlyOwner() {
@@ -28,6 +30,14 @@ contract DEX {
         _;
     }
 
+    function addToken(address _token, uint256 _price) external onlyOwner {
+        require(_token != address(0), "invalid token address");
+        require(_price > 0, "price must be greater than zero");
+        require(tokenPrices[_token] == 0, "token already exists");
+
+        tokenPrices[_token] = _price;
+        supportedTokens.push(_token);
+    }
     /**
      * @dev Transfers pre-approved tokens from owner to DEX contract for trading inventory
      * @notice Owner must first approve tokens to this contract before calling this function

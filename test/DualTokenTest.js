@@ -36,4 +36,36 @@ describe("Dual Token Integration", () => {
       expect(dexTokenBalance).to.equal(0);
     });
   });
+
+  describe("Token Management", () => {
+    it("Should allow owner to add new token", async () => {
+      await dex.addToken(aliceCoin.address, 150);
+      expect(await dex.tokenPrices(aliceCoin.address)).to.equal(150);
+      expect(await dex.supportedTokens(1)).to.equal(aliceCoin.address);
+    });
+
+    it("Should reject invalid token address", async () => {
+      await expect(dex.addToken(ethers.constants.AddressZero, 100))
+        .to.be.revertedWith("invalid token address");
+    });
+
+    it("Should reject zero price", async () => {
+      await expect(dex.addToken(aliceCoin.address, 0))
+        .to.be.revertedWith("price must be greater than zero");
+    });
+
+    it("Should reject duplicate token", async () => {
+      const TestToken = await ethers.getContractFactory("TokenAli");
+      const testToken = await TestToken.deploy("100");
+      await dex.addToken(testToken.address, 150);
+  
+      await expect(dex.addToken(aliceCoin.address, 200))
+        .to.be.revertedWith("token already exists");
+    });
+
+    it("Should reject non-owner", async () => {
+      await expect(dex.connect(addr1).addToken(aliceCoin.address, 150))
+        .to.be.revertedWith("you are not the owner");
+    });
+  });
 });
