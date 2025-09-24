@@ -6,7 +6,7 @@ async function main() {
   const TimToken = await hre.ethers.getContractFactory("Token");
   const timToken = await TimToken.deploy("100");
 
-  const AliceToken = await hre.ethers.getContractFactory("AliceCoin");
+  const AliceToken = await hre.ethers.getContractFactory("TokenAli");
   const aliceToken = await AliceToken.deploy("200");
 
   const DEX = await hre.ethers.getContractFactory("DEX");
